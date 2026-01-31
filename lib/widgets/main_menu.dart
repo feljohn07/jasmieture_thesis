@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '/widgets/hud.dart';
-import '/game/dino_run.dart';
+import '../game/main_game.dart';
 
 // This represents the main menu overlay.
 class MainMenu extends StatelessWidget {
@@ -15,7 +15,7 @@ class MainMenu extends StatelessWidget {
   static const id = 'MainMenu';
 
   // Reference to parent game.
-  final DinoRun game;
+  final MainGame game;
 
   const MainMenu(this.game, {super.key});
 

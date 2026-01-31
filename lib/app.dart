@@ -3,14 +3,14 @@ import 'package:jasmieture_thesis/game/audio_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-class DinoRunApp extends StatefulWidget {
-  const DinoRunApp({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
 
   @override
-  State<DinoRunApp> createState() => _DinoRunAppState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _DinoRunAppState extends State<DinoRunApp> with WidgetsBindingObserver {
+class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();

@@ -24,14 +24,14 @@ import '/widgets/game_over_menu.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 // This is the main flame game class.
-class DinoRun extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
+class MainGame extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final SettingsData settings;
   final PlayerData playerData;
   final QuizData quizData;
   final ShopData shopData;
   final RiveProvider riveProvider;
 
-  DinoRun({
+  MainGame({
     super.camera,
     required this.shopData,
     required this.playerData,

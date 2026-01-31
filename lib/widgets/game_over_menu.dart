@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '/game/dino_run.dart';
+import '../game/main_game.dart';
 
 // This represents the game over overlay,
 // displayed with dino runs out of lives.
@@ -17,7 +17,7 @@ class GameOverMenu extends StatelessWidget {
   static const id = 'GameOverMenu';
 
   // Reference to parent game.
-  final DinoRun game;
+  final MainGame game;
 
   const GameOverMenu(this.game, {super.key});
 

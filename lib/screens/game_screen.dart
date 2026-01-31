@@ -1,4 +1,4 @@
-import 'package:jasmieture_thesis/game/dino_run.dart';
+import 'package:jasmieture_thesis/game/main_game.dart';
 import 'package:jasmieture_thesis/models/player_data.dart';
 import 'package:jasmieture_thesis/models/settings.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
@@ -23,7 +23,7 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GameWidget<DinoRun>.controlled(
+      body: GameWidget<MainGame>.controlled(
         // This will dislpay a loading bar until [DinoRun] completes
         // its onLoad method.
         loadingBuilder: (conetxt) => const Center(
@@ -43,7 +43,7 @@ class GameScreen extends StatelessWidget {
         },
         // By default MainMenu overlay will be active.
         // initialActiveOverlays: const [MainMenu.id],
-        gameFactory: () => DinoRun(
+        gameFactory: () => MainGame(
           playerData: Provider.of<PlayerData>(context, listen: false),
           settings: Provider.of<SettingsData>(context, listen: false),
           quizData: Provider.of<QuizData>(context, listen: false),

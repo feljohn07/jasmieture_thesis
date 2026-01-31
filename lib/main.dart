@@ -90,7 +90,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => shopData),
         ChangeNotifierProvider(create: (_) => riveProvider),
       ],
-      child: DinoRunApp(),
+      child: MainApp(),
     ),
   );
 }

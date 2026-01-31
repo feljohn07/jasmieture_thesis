@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/widgets/hud.dart';
-import '/game/dino_run.dart';
+import '../game/main_game.dart';
 import '/game/audio_manager.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 
 class QuestionOverlay extends StatefulWidget {
   static const id = 'Question';
-  final DinoRun game;
+  final MainGame game;
 
   const QuestionOverlay(this.game, {super.key});
 

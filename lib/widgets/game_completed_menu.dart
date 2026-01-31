@@ -1,7 +1,7 @@
 import 'dart:ui' show ImageFilter;
 
 import 'package:jasmieture_thesis/game/audio_manager.dart';
-import 'package:jasmieture_thesis/game/dino_run.dart';
+import 'package:jasmieture_thesis/game/main_game.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
 import 'package:jasmieture_thesis/core/shared/colors.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class GameCompletedMenu extends StatefulWidget {
   static const id = 'GameCompletedMenu';
-  final DinoRun game;
+  final MainGame game;
 
   const GameCompletedMenu(this.game, {super.key});
 

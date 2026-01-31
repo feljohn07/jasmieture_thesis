@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // 1. Import this
 import 'package:provider/provider.dart';
 
-import '/game/dino_run.dart';
+import '../game/main_game.dart';
 import '/game/audio_manager.dart';
 import '/models/player_data.dart';
 import '/widgets/pause_menu.dart';
@@ -16,7 +16,7 @@ class Hud extends StatelessWidget {
   static const id = 'Hud';
 
   // Reference to parent game.
-  final DinoRun game;
+  final MainGame game;
 
   const Hud(this.game, {super.key});
 

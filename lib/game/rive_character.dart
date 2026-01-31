@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:jasmieture_thesis/game/audio_manager.dart';
-import 'package:jasmieture_thesis/game/dino_run.dart';
+import 'package:jasmieture_thesis/game/main_game.dart';
 import 'package:jasmieture_thesis/game/enemy.dart';
 import 'package:jasmieture_thesis/models/player_data.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
@@ -14,7 +14,7 @@ import 'package:flame/collisions.dart';
 
 enum CharacterAnimationStates { idle, run, kick, hit, sprint }
 
-class SkillsAnimationComponent extends RiveComponent with CollisionCallbacks, HasGameReference<DinoRun> {
+class SkillsAnimationComponent extends RiveComponent with CollisionCallbacks, HasGameReference<MainGame> {
   final PlayerData playerData;
   final ShopData shopData;
 

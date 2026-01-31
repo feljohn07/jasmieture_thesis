@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '/widgets/hud.dart';
-import '/game/dino_run.dart';
+import '../game/main_game.dart';
 import '/game/audio_manager.dart';
 
 // This represents the pause menu overlay.
@@ -18,7 +18,7 @@ class PauseMenu extends StatelessWidget {
   static const id = 'PauseMenu';
 
   // Reference to parent game.
-  final DinoRun game;
+  final MainGame game;
 
   const PauseMenu(this.game, {super.key});
 
