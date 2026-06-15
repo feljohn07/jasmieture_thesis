@@ -2,12 +2,14 @@ import 'package:jasmieture_thesis/models/settings.dart';
 import 'package:jasmieture_thesis/core/shared/colors.dart';
 import 'package:jasmieture_thesis/game/audio_manager.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
-import 'package:jasmieture_thesis/screens/profile_screen.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/language_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart'; // 1. Import this
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -189,7 +191,39 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               )
                   .animate()
                   .fade(duration: 800.ms)
-                  .moveY(begin: -50, end: 0, curve: Curves.easeOut), // Logo drops down
+                  .moveY(begin: -50, end: 0, curve: Curves.easeOut),
+
+              // ── Logged-in player badge ────────────────────────────────────
+              Positioned(
+                top: 10,
+                right: 14,
+                child: Builder(builder: (ctx) {
+                  final name =
+                      ctx.watch<AuthProvider>().currentPlayer?.firstname ?? '';
+                  if (name.isEmpty) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.brown.shade700.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.person, color: Colors.white, size: 14),
+                        const SizedBox(width: 4),
+                        Text(name,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12)),
+                      ],
+                    ),
+                  )
+                      .animate()
+                      .fade(duration: 600.ms)
+                      .slideX(begin: 0.3, curve: Curves.easeOut);
+                }),
+              ),
             ],
           ),
         );

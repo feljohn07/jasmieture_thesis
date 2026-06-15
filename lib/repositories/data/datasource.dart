@@ -91,7 +91,8 @@ class Datasource {
     _historyBox = await Hive.openBox<History>('history');
     _audioBgmBox = await Hive.openBox<AudioBgm>('audiBgm');
 
-    // TODO - clear for now for testing.
+    // Clear only asset-backed boxes that are always reloaded from JSON/static data.
+    // Player, history, and audioBgm boxes intentionally persist across restarts.
     await _languageBox.clear();
     await _levelBox.clear();
     await _chapterBox.clear();
@@ -101,8 +102,6 @@ class Datasource {
     await _characterBox.clear();
     await _itemBox.clear();
     await _backgroundBox.clear();
-    await _settingsBox.clear();
-    await _historyBox.clear();
 
     // initializing data when the app first load, so it will not be empty
     if (_characterBox.isEmpty) {

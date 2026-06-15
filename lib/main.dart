@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:jasmieture_thesis/repositories/data/datasource.dart';
 import 'package:jasmieture_thesis/repositories/implementations/player_repository_impl.dart';
 import 'package:jasmieture_thesis/repositories/implementations/settings_repository_impl.dart';
+import 'package:jasmieture_thesis/repositories/player_repository.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/language_provider.dart';
 
 import 'app.dart';
@@ -34,6 +36,7 @@ final shopRepository = ShopRepositoryImpl(datasource: datasource);
 final playerRepository = PlayerRepositoryImp(datasource: datasource);
 final settingsRepository = SettingsRepositoryImp(datasource: datasource);
 final historyRepository = GameHistoryRepositoryImpl(datasource: datasource);
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
@@ -70,6 +73,13 @@ Future<void> main() async {
   final shopData = ShopData(shopRepository: shopRepository);
   final riveProvider = RiveProvider();
 
+  // ── Auth Provider ───────────────────────────────────────────────────────────
+  final authProvider = AuthProvider(
+    playerRepository: playerRepository,
+    settingsRepository: settingsRepository,
+    settingsData: settingsData,
+  );
+
   await riveProvider.initRive(shopData.shop);
   await AudioManager.instance.init(settingsData, SoloudAudioRepositoryImp());
 
@@ -89,6 +99,9 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => settingsData),
         ChangeNotifierProvider(create: (_) => shopData),
         ChangeNotifierProvider(create: (_) => riveProvider),
+        ChangeNotifierProvider(create: (_) => authProvider),
+        // Expose the raw repository so LoginScreen can list players
+        Provider<PlayerRepository>.value(value: playerRepository),
       ],
       child: MainApp(),
     ),

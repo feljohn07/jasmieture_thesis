@@ -12,15 +12,6 @@ class PlayerRepositoryImp extends PlayerRepository {
 
   Box<Player> get _box => datasource.playerBox;
 
-  // static const String boxName = 'player';
-  // late Box<Player> _box;
-
-  // @override
-  // Future<void> initialize() async {
-  //   if (!Hive.isAdapterRegistered(0)) Hive.registerAdapter(PlayerAdapter());
-  //   _box = await Hive.openBox<Player>(boxName);
-  // }
-
   @override
   Future<void> createPlayer(Player player) async {
     await _box.add(player);
@@ -32,7 +23,23 @@ class PlayerRepositoryImp extends PlayerRepository {
   }
 
   @override
+  Future<void> deletePlayer(Player player) async {
+    await player.delete();
+  }
+
+  /// Returns the single stored player (legacy single-player compat).
+  @override
   Player? getPlayer() {
     return _box.values.firstOrNull;
+  }
+
+  @override
+  List<Player> getAllPlayers() {
+    return _box.values.toList();
+  }
+
+  @override
+  Player? getPlayerByKey(int key) {
+    return _box.get(key);
   }
 }

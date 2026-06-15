@@ -1,6 +1,7 @@
 import 'package:jasmieture_thesis/game/main_game.dart';
 import 'package:jasmieture_thesis/models/player_data.dart';
 import 'package:jasmieture_thesis/models/settings.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
 import 'package:jasmieture_thesis/view_models.dart/rive_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/shop_data.dart';
@@ -49,6 +50,7 @@ class GameScreen extends StatelessWidget {
           quizData: Provider.of<QuizData>(context, listen: false),
           shopData: Provider.of<ShopData>(context, listen: false),
           riveProvider: Provider.of<RiveProvider>(context, listen: false),
+          authProvider: Provider.of<AuthProvider>(context, listen: false),
           // Use a fixed resolution camera to avoid manually
           // scaling and handling different screen sizes.
           camera: CameraComponent.withFixedResolution(

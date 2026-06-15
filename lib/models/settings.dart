@@ -13,6 +13,13 @@ class SettingsData extends ChangeNotifier {
     settings = settingsRepository.getSettings();
   }
 
+  /// Re-reads settings from the repository (called after a user switches in/out).
+  void reloadFromRepository() {
+    settings = settingsRepository.getSettings();
+    notifyListeners();
+  }
+
+
   AudioBgm get bgmPath => settings.bgmPath;
   Future<void> setBgmPath(AudioBgm path) async {
     await settingsRepository.setBgmPath(path);

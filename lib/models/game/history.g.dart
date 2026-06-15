@@ -21,13 +21,14 @@ class HistoryAdapter extends TypeAdapter<History> {
       chapter: fields[1] as int,
       score: fields[2] as int,
       timeTaken: fields[3] as int,
+      playerKey: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, History obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.level)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class HistoryAdapter extends TypeAdapter<History> {
       ..writeByte(2)
       ..write(obj.score)
       ..writeByte(3)
-      ..write(obj.timeTaken);
+      ..write(obj.timeTaken)
+      ..writeByte(4)
+      ..write(obj.playerKey);
   }
 
   @override

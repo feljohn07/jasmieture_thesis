@@ -23,6 +23,10 @@ class QuizData extends ChangeNotifier {
   String get language => _settingsRepository.getSettings().language;
   List<History> get histories => _gameHistoryRepository.all().reversed.toList();
 
+  /// Returns history records for a specific player, newest first.
+  List<History> historiesForPlayer(int playerKey) =>
+      _gameHistoryRepository.allForPlayer(playerKey).reversed.toList();
+
   int level = 0;
   int chapter = 0;
 
@@ -177,7 +181,14 @@ class QuizData extends ChangeNotifier {
     super.dispose();
   }
 
-  void storeHistory() {
-    _gameHistoryRepository.add(History(level: level, chapter: chapter, score: score, timeTaken: _elapsedSeconds));
+  /// Records the completed session. [playerKey] is the Hive key of the active player.
+  void storeHistory({required int playerKey}) {
+    _gameHistoryRepository.add(History(
+      level: level,
+      chapter: chapter,
+      score: score,
+      timeTaken: _elapsedSeconds,
+      playerKey: playerKey,
+    ));
   }
 }

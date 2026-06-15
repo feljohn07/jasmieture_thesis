@@ -19,4 +19,9 @@ class GameHistoryRepositoryImpl extends GameHistoryRepository {
   List<History> all() {
     return _box.values.toList();
   }
+
+  @override
+  List<History> allForPlayer(int playerKey) {
+    return _box.values.where((h) => h.playerKey == playerKey).toList();
+  }
 }

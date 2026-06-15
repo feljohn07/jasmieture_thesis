@@ -1,6 +1,7 @@
 import 'package:jasmieture_thesis/game/audio_manager.dart';
 import 'package:jasmieture_thesis/models/quiz_models/level.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/language_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
 import 'package:jasmieture_thesis/widgets/plank_button.dart';
@@ -64,7 +65,9 @@ class _LevelScreenState extends State<LevelScreen> {
                                 onTap: () {
                                   // ... (Existing tap logic) ...
                                   AudioManager.instance.playSfx(AudioSfx.click);
-                                  if (levels[index].lock) {
+                                  final auth = context.read<AuthProvider>();
+                                  final isLocked = !auth.isLevelUnlocked(levels[index].level);
+                                  if (isLocked) {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
@@ -181,7 +184,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                       ),
                                     ),
                                     Visibility(
-                                      visible: levels[index].lock,
+                                      visible: !context.watch<AuthProvider>().isLevelUnlocked(levels[index].level),
                                       child: Positioned(
                                         right: 0,
                                         top: 0,

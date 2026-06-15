@@ -1,4 +1,5 @@
 import 'package:jasmieture_thesis/game/rive_character.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
 import 'package:jasmieture_thesis/view_models.dart/rive_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/shop_data.dart';
@@ -30,6 +31,7 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
   final QuizData quizData;
   final ShopData shopData;
   final RiveProvider riveProvider;
+  final AuthProvider authProvider;
 
   MainGame({
     super.camera,
@@ -38,6 +40,7 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
     required this.settings,
     required this.quizData,
     required this.riveProvider,
+    required this.authProvider,
   });
 
   // List of all the image assets.
@@ -218,10 +221,15 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
       pauseEngine();
       AudioManager.instance.pauseBgm();
       shopData.setStar(quizData.bonus + quizData.score + shopData.star);
-      quizData.storeHistory();
+      final playerKey = authProvider.currentPlayer?.key as int? ?? -1;
+      quizData.storeHistory(playerKey: playerKey);
 
-      // TODO unlock next level
+      // Persist unlock in the player object via AuthProvider
       quizData.unlockNextChapter();
+      final auth = authProvider;
+      final lvl = quizData.level;
+      final ch = quizData.chapter;
+      auth.unlockChapter(lvl, ch + 1);
     }
 
     // Show Question when the character hits enemy

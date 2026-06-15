@@ -11,11 +11,16 @@ class History extends HiveObject {
   int score;
   @HiveField(3)
   int timeTaken;
+  /// Hive integer key of the [Player] who owns this record.
+  @HiveField(4)
+  int playerKey;
 
   History({
     required this.level,
     required this.chapter,
     required this.score,
     required this.timeTaken,
+    required this.playerKey,
   });
 }
+
