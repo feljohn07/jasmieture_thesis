@@ -25,7 +25,8 @@ import '/widgets/game_over_menu.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 // This is the main flame game class.
-class MainGame extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
+class MainGame extends FlameGame
+    with TapDetector, HasCollisionDetection, KeyboardEvents {
   final SettingsData settings;
   final PlayerData playerData;
   final QuizData quizData;
@@ -120,7 +121,8 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
     // characterArtboard = await loadArtboard(RiveFile.asset('assets/rive/running_and_jumping (13).riv'),
     //     artboardName: shopData.shop.characterSelected.riveId);
     shopData.characterPreview = shopData.shop.characterSelected;
-    riveProvider.loadCharacterArtboard(shopData.characterPreview, shopData.shop);
+    riveProvider.loadCharacterArtboard(
+        shopData.characterPreview, shopData.shop);
 
     characterArtboard = riveProvider.artboard!;
 
@@ -226,10 +228,6 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
 
       // Persist unlock in the player object via AuthProvider
       quizData.unlockNextChapter();
-      final auth = authProvider;
-      final lvl = quizData.level;
-      final ch = quizData.chapter;
-      auth.unlockChapter(lvl, ch + 1);
     }
 
     // Show Question when the character hits enemy
@@ -261,7 +259,8 @@ class MainGame extends FlameGame with TapDetector, HasCollisionDetection, Keyboa
     final isKeyDown = event is KeyDownEvent;
 
     if (isKeyDown) {
-      if (keysPressed.contains(LogicalKeyboardKey.space) || keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+      if (keysPressed.contains(LogicalKeyboardKey.space) ||
+          keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
         // _dino.jump();
         _runningCharacter.jump();
       } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {

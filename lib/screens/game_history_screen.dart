@@ -1,6 +1,7 @@
 import 'package:jasmieture_thesis/game/audio_manager.dart';
 import 'package:jasmieture_thesis/models/game/history.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +12,10 @@ class GameHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<History> histories = context.watch<QuizData>().histories;
+    final player = context.watch<AuthProvider>().currentPlayer;
+    List<History> histories = player != null
+        ? context.watch<QuizData>().historiesForPlayer(player.key as int)
+        : [];
 
     return Scaffold(
       // appBar: AppBar(),

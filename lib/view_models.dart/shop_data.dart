@@ -4,6 +4,7 @@ import 'package:jasmieture_thesis/models/shop/item.dart';
 import 'package:jasmieture_thesis/models/shop/shop.dart';
 import 'package:jasmieture_thesis/repositories/data/item_data.dart';
 import 'package:jasmieture_thesis/repositories/shop_repository.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:flutter/widgets.dart';
 
 enum SwapDirection {
@@ -92,12 +93,18 @@ class ShopData extends ChangeNotifier {
   }
 
   void setStar(int value) async {
-    await shopRepository.setStar(value);
+    final player = authProvider.currentPlayer;
+    final int playerKey = player?.key as int? ?? 4294967295;
+    await shopRepository.setStar(playerKey, value);
+    shop.star = value; // update memory
     notifyListeners();
   }
 
-  void purchaseItem(Item item) async {
-    await shopRepository.purchaseItem(item);
+  void purchaseItem(Item item) {
+    final player = authProvider.currentPlayer;
+    final int playerKey = player?.key as int? ?? 4294967295;
+    shopRepository.purchaseItem(playerKey, item);
+    item.purchased = true; // Update in-memory state for UI
     notifyListeners();
   }
 
@@ -108,29 +115,51 @@ class ShopData extends ChangeNotifier {
   List<Item> get shirtItems =>
       characterItems.where((element) => element.riveInputCategory == RiveItemCategory.shirtPrintChoices.name).toList();
 
-  ShopData({required this.shopRepository}) {
-    _init();
+  final AuthProvider authProvider;
+
+  ShopData({required this.shopRepository, required this.authProvider}) {
+    authProvider.addListener(initialize);
   }
 
-  Future<void> _init() async {
-    characters = shopRepository.getCharacters();
-    characterItems = shopRepository.getItems();
-    backgrounds = shopRepository.getBackgrounds();
-    shop = shopRepository.getShop();
+  Future<void> initialize() async {
+    final player = authProvider.currentPlayer;
+    final int playerKey = player?.key as int? ?? 4294967295;
+
+    shop = shopRepository.getShop(playerKey);
+
+    characters = shopRepository.getCharacters().map((c) {
+      c.purchased = shop.purchasedCharacters.contains(c.name) || c.cost == 0;
+      return c;
+    }).toList();
+
+    characterItems = shopRepository.getItems().map((i) {
+      i.purchased = shop.purchasedItems.contains(i.name) || i.cost == 0;
+      return i;
+    }).toList();
+
+    backgrounds = shopRepository.getBackgrounds().map((b) {
+      b.purchased = shop.purchasedBackgrounds.contains(b.name) || b.cost == 0;
+      return b;
+    }).toList();
 
     characterPreview = shop.characterSelected;
 
-    // shop.star = 500; // TODO - for testing only, delete in production.
-    shop.star = 0;
+    notifyListeners();
   }
 
   void purchaseBackground(Background background) {
-    shopRepository.purchaseBackground(background);
+    final player = authProvider.currentPlayer;
+    final int playerKey = player?.key as int? ?? 4294967295;
+    shopRepository.purchaseBackground(playerKey, background);
+    background.purchased = true; // Update in-memory state for UI
     notifyListeners();
   }
 
   void purchaseCharacter(Character character) {
-    shopRepository.purchaseCharacter(character);
+    final player = authProvider.currentPlayer;
+    final int playerKey = player?.key as int? ?? 4294967295;
+    shopRepository.purchaseCharacter(playerKey, character);
+    character.purchased = true; // Update in-memory state for UI
     shop.characterSelected = character;
     shop.save();
     notifyListeners();

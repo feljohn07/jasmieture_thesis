@@ -23,13 +23,16 @@ class ShopAdapter extends TypeAdapter<Shop> {
       eyeItemSelected: fields[3] as Item,
       shirtItemSelected: fields[4] as Item,
       backgroundSelected: fields[5] as Background,
+      purchasedCharacters: (fields[6] as List?)?.cast<String>(),
+      purchasedItems: (fields[7] as List?)?.cast<String>(),
+      purchasedBackgrounds: (fields[8] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Shop obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.star)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class ShopAdapter extends TypeAdapter<Shop> {
       ..writeByte(4)
       ..write(obj.shirtItemSelected)
       ..writeByte(5)
-      ..write(obj.backgroundSelected);
+      ..write(obj.backgroundSelected)
+      ..writeByte(6)
+      ..write(obj.purchasedCharacters)
+      ..writeByte(7)
+      ..write(obj.purchasedItems)
+      ..writeByte(8)
+      ..write(obj.purchasedBackgrounds);
   }
 
   @override

@@ -9,6 +9,7 @@ class SoloudAudioRepositoryImp extends AudioRepository {
 
   SoundHandle? musicHandle;
   SoundHandle? questionHandle;
+  AudioBgm? _currentBgm;
 
   // --- Playlist State ---
   List<String> _playlist = [];
@@ -25,16 +26,36 @@ class SoloudAudioRepositoryImp extends AudioRepository {
 
   @override
   Future<void> playBgm(AudioBgm bgm) async {
+    if (_currentBgm == bgm) return;
+
+    _currentBgm = bgm;
+
     if (musicHandle != null) {
       if (_soloud.getIsValidVoiceHandle(musicHandle!)) {
         await _soloud.stop(musicHandle!);
       }
     }
 
-    final bgmSource = await _soloud.loadAsset(
-      'assets/audio/${bgm.fileName}',
-      mode: LoadMode.disk,
-    );
+    AudioSource bgmSource;
+    try {
+      bgmSource = await _soloud.loadAsset(
+        'assets/audio/${bgm.fileName}',
+        mode: LoadMode.disk,
+      );
+    } catch (e) {
+      if (_currentBgm == bgm) {
+        _currentBgm = null;
+      }
+      return;
+    }
+
+    // If another bgm was requested while loading, abort this one
+    if (_currentBgm != bgm) return;
+
+    // Stop previous if there was an overlap
+    if (musicHandle != null && _soloud.getIsValidVoiceHandle(musicHandle!)) {
+      await _soloud.stop(musicHandle!);
+    }
 
     musicHandle = await _soloud.play(bgmSource, looping: true, volume: 0.5);
   }
@@ -65,6 +86,7 @@ class SoloudAudioRepositoryImp extends AudioRepository {
 
   @override
   Future<void> stopBgm() async {
+    _currentBgm = null;
     if (musicHandle == null) return;
     _soloud.stop(musicHandle!);
   }

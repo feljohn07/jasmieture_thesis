@@ -6,15 +6,15 @@ import 'package:jasmieture_thesis/models/shop/shop.dart';
 abstract class ShopRepository {
   // Future<void> init();
 
-  Shop getShop();
-  Future<void> setStar(int star);
+  Shop getShop(int playerKey);
+  Future<void> setStar(int playerKey, int star);
 
   List<Character> getCharacters();
 
   List<Item> getItems();
   List<Background> getBackgrounds();
 
-  Future<void> purchaseItem(Item item);
-  Future<void> purchaseBackground(Background background);
-  Future<void> purchaseCharacter(Character character);
+  Future<void> purchaseItem(int playerKey, Item item);
+  Future<void> purchaseBackground(int playerKey, Background background);
+  Future<void> purchaseCharacter(int playerKey, Character character);
 }

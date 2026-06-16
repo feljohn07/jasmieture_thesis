@@ -69,16 +69,19 @@ Future<void> main() async {
   final playerData = PlayerData(playerRepository);
   final settingsData = SettingsData(settingsRepository);
   final languageProvider = LanguageProvider(settingsRepository);
-  final quizData = QuizData(lessonRepository, settingsRepository, historyRepository);
-  final shopData = ShopData(shopRepository: shopRepository);
-  final riveProvider = RiveProvider();
-
   // ── Auth Provider ───────────────────────────────────────────────────────────
   final authProvider = AuthProvider(
     playerRepository: playerRepository,
     settingsRepository: settingsRepository,
     settingsData: settingsData,
   );
+
+  final quizData = QuizData(lessonRepository, settingsRepository, historyRepository, authProvider);
+
+  final shopData = ShopData(shopRepository: shopRepository, authProvider: authProvider);
+  await shopData.initialize();
+
+  final riveProvider = RiveProvider();
 
   await riveProvider.initRive(shopData.shop);
   await AudioManager.instance.init(settingsData, SoloudAudioRepositoryImp());

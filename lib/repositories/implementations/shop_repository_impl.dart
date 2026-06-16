@@ -67,27 +67,30 @@ class ShopRepositoryImpl implements ShopRepository {
   }
 
   @override
-  Future<void> purchaseItem(Item item) async {
-    item.purchased = true;
-    getShop()
-      ..star -= item.cost
-      ..save();
-    await item.save();
+  Future<void> purchaseItem(int playerKey, Item item) async {
+    final shop = getShop(playerKey);
+    if (!shop.purchasedItems.contains(item.name)) {
+      shop.purchasedItems.add(item.name);
+    }
+    shop.star -= item.cost;
+    await shop.save();
   }
 
   @override
-  Future<void> purchaseBackground(Background background) async {
-    background.purchased = true;
-    await background.save();
-    getShop()
-      ..star -= background.cost
-      ..save();
+  Future<void> purchaseBackground(int playerKey, Background background) async {
+    final shop = getShop(playerKey);
+    if (!shop.purchasedBackgrounds.contains(background.name)) {
+      shop.purchasedBackgrounds.add(background.name);
+    }
+    shop.star -= background.cost;
+    await shop.save();
   }
 
   @override
-  Shop getShop() {
-    if (_shopBox.isEmpty) {
-      _shopBox.add(
+  Shop getShop(int playerKey) {
+    if (!_shopBox.containsKey(playerKey)) {
+      _shopBox.put(
+        playerKey,
         Shop(
           star: 0,
           characterSelected: _characterBox.values.first,
@@ -102,25 +105,23 @@ class ShopRepositoryImpl implements ShopRepository {
       );
     }
 
-    print('${_shopBox.values.toString()}');
-
-    return _shopBox.values.first;
+    return _shopBox.get(playerKey)!;
   }
 
   @override
-  Future<void> setStar(int star) async {
-    _shopBox.values.first
-      ..star = star
-      ..save();
-    // await _shopBox.values.first.save();
+  Future<void> setStar(int playerKey, int star) async {
+    final shop = getShop(playerKey);
+    shop.star = star;
+    await shop.save();
   }
 
   @override
-  Future<void> purchaseCharacter(Character character) async {
-    character.purchased = true;
-    await character.save();
-    getShop()
-      ..star -= character.cost
-      ..save();
+  Future<void> purchaseCharacter(int playerKey, Character character) async {
+    final shop = getShop(playerKey);
+    if (!shop.purchasedCharacters.contains(character.name)) {
+      shop.purchasedCharacters.add(character.name);
+    }
+    shop.star -= character.cost;
+    await shop.save();
   }
 }

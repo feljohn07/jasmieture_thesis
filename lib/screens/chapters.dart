@@ -3,6 +3,7 @@ import 'package:jasmieture_thesis/models/quiz_models/chapter.dart';
 import 'package:jasmieture_thesis/repositories/audio_repository.dart';
 import 'package:jasmieture_thesis/core/shared/colors.dart';
 import 'package:jasmieture_thesis/view_models.dart/language_provider.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 import 'package:jasmieture_thesis/view_models.dart/quiz_data.dart';
 import 'package:jasmieture_thesis/widgets/plank_button.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,10 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                           child: InkWell(
                             onTap: () {
                               AudioManager.instance.playSfx(AudioSfx.click);
-                              if (chapters[index].lock) {
+                              final auth = context.read<AuthProvider>();
+                              final isLocked = !auth.isChapterUnlocked(widget.level, chapters[index].chapter);
+
+                              if (isLocked) {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -150,7 +154,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                           ),
                         ),
                         Visibility(
-                          visible: chapters[index].lock,
+                          visible: !context.watch<AuthProvider>().isChapterUnlocked(widget.level, chapters[index].chapter),
                           child: Positioned(
                             right: 0,
                             top: 0,

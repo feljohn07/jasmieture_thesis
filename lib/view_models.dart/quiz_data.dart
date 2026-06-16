@@ -12,13 +12,16 @@ import 'package:jasmieture_thesis/repositories/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:jasmieture_thesis/models/quiz_models/question.dart';
 import 'package:jasmieture_thesis/repositories/lesson_repository.dart';
+import 'package:jasmieture_thesis/view_models.dart/auth_provider.dart';
 
 class QuizData extends ChangeNotifier {
   final LessonRepository _lessonRepository;
   final SettingsRepository _settingsRepository;
   final GameHistoryRepository _gameHistoryRepository;
+  final AuthProvider authProvider;
 
-  QuizData(this._lessonRepository, this._settingsRepository, this._gameHistoryRepository);
+  QuizData(this._lessonRepository, this._settingsRepository,
+      this._gameHistoryRepository, this.authProvider);
 
   String get language => _settingsRepository.getSettings().language;
   List<History> get histories => _gameHistoryRepository.all().reversed.toList();
@@ -82,6 +85,12 @@ class QuizData extends ChangeNotifier {
       _lessonRepository.getQuestions(language, level, chapter),
     )..shuffle();
 
+    // DEBUG: Temporarily reduce questions to 1 for quick testing.
+    // Make sure to remove or comment this out before releasing!
+    if (questions.isNotEmpty) {
+      questions = questions.take(1).toList();
+    }
+
     totalQuestions = questions.length;
     // print(questions.length);
     notifyListeners();
@@ -100,7 +109,8 @@ class QuizData extends ChangeNotifier {
     return values;
   }
 
-  Future<void> check(String answerId, Future<void> Function(bool isCorrect) callback) async {
+  Future<void> check(
+      String answerId, Future<void> Function(bool isCorrect) callback) async {
     final isCorrect = questions.first.correctChoice == answerId;
 
     if (isCorrect) {
@@ -122,23 +132,25 @@ class QuizData extends ChangeNotifier {
 
   void unlockNextChapter() {
     Level level = levels.lastWhere((level) => level.level == this.level);
-    Chapter chapter = chapters.lastWhere((chapter) => chapter.chapter == this.chapter);
+    Chapter chapter =
+        chapters.lastWhere((chapter) => chapter.chapter == this.chapter);
 
     // meaning, it hasnt reach the last item
-    bool hasNextChapter = (chapters.indexOf(chapter) + 1) != chapters.length;
-    int currentChapterIndex = chapters.indexOf(chapter);
+    int currentChapterIndex = chapters.indexWhere((c) => c.chapter == chapter.chapter);
+    bool hasNextChapter = (currentChapterIndex + 1) < chapters.length;
 
     if (hasNextChapter) {
       Chapter nextChapter = chapters[currentChapterIndex + 1];
-      lessonRepository.unlockChapter(nextChapter);
+      authProvider.unlockChapter(this.level, nextChapter.chapter);
     } else {
-      int currentLevelIndex = levels.indexOf(level);
-      bool hasNextLevel = (levels.indexOf(level) + 1) != levels.length;
+      int currentLevelIndex = levels.indexWhere((l) => l.level == level.level);
+      bool hasNextLevel = (currentLevelIndex + 1) < levels.length;
 
       if (hasNextLevel) {
         Level nextLevel = levels[currentLevelIndex + 1];
-        lessonRepository.unlockLevel(nextLevel);
-        lessonRepository.unlockChapter(nextLevel.chapters[0]);
+
+        authProvider.unlockLevel(nextLevel.level);
+        authProvider.unlockChapter(nextLevel.level, nextLevel.chapters[0].chapter);
       }
     }
   }

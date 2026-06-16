@@ -7,9 +7,8 @@ import 'package:jasmieture_thesis/view_models.dart/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jasmieture_thesis/view_models.dart/shop_data.dart';
 import 'package:provider/provider.dart';
-
-
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -74,8 +73,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         )
                             .animate() // Start Animation
                             .fade(duration: 600.ms)
-                            .slideY(begin: 0.5, curve: Curves.easeOutBack) // Bouncy entry
-                            .shimmer(delay: 1500.ms, duration: 1500.ms), // Periodic shine
+                            .slideY(
+                                begin: 0.5,
+                                curve: Curves.easeOutBack) // Bouncy entry
+                            .shimmer(
+                                delay: 1500.ms,
+                                duration: 1500.ms), // Periodic shine
 
                         SizedBox(height: 4),
 
@@ -91,14 +94,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                         'assets/images/plank wood.png'))),
                             child: Center(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: 14,
-                                  children: [
-                                    Text(context.watch<LanguageProvider>().shop,
-                                        style: TextStyle(
-                                            fontSize: 30, color: colorBlack)),
-                                  ],
-                                )),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 14,
+                              children: [
+                                Text(context.watch<LanguageProvider>().shop,
+                                    style: TextStyle(
+                                        fontSize: 30, color: colorBlack)),
+                              ],
+                            )),
                           ),
                           onTap: () {
                             AudioManager.instance.playSfx(AudioSfx.click);
@@ -128,14 +131,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                               'assets/images/plank wood.png'))),
                                   child: Center(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        spacing: 14,
-                                        children: [
-                                          const Text('Settings',
-                                              style: TextStyle(
-                                                  fontSize: 30, color: colorBlack)),
-                                        ],
-                                      )),
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 14,
+                                    children: [
+                                      const Text('Settings',
+                                          style: TextStyle(
+                                              fontSize: 30, color: colorBlack)),
+                                    ],
+                                  )),
                                 ),
                                 onTap: () {
                                   AudioManager.instance.playSfx(AudioSfx.click);
@@ -144,7 +147,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               )
                                   .animate(delay: 200.ms) // Wait 200ms
                                   .fade(duration: 600.ms)
-                                  .slideY(begin: 0.5, curve: Curves.easeOutBack),
+                                  .slideY(
+                                      begin: 0.5, curve: Curves.easeOutBack),
 
                               // --- BUTTON 4: PROFILE ---
                               InkWell(
@@ -169,7 +173,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               )
                                   .animate(delay: 300.ms) // Wait 300ms
                                   .fade(duration: 600.ms)
-                                  .scale(curve: Curves.elasticOut), // Pop in effect
+                                  .scale(
+                                      curve:
+                                          Curves.elasticOut), // Pop in effect
                             ],
                           ),
                         ),
@@ -193,6 +199,39 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   .fade(duration: 800.ms)
                   .moveY(begin: -50, end: 0, curve: Curves.easeOut),
 
+              // ── Stars badge ────────────────────────────────────
+              Positioned(
+                top: 10,
+                left: 14,
+                child: Builder(builder: (ctx) {
+                  final stars = ctx.watch<ShopData>().star;
+                  return Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.brown.shade700.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.star,
+                            color: Colors.amberAccent, size: 14),
+                        const SizedBox(width: 4),
+                        Text('$stars',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  )
+                      .animate()
+                      .fade(duration: 600.ms)
+                      .slideX(begin: -0.3, curve: Curves.easeOut);
+                }),
+              ),
+
               // ── Logged-in player badge ────────────────────────────────────
               Positioned(
                 top: 10,
@@ -202,8 +241,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ctx.watch<AuthProvider>().currentPlayer?.firstname ?? '';
                   if (name.isEmpty) return const SizedBox.shrink();
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.brown.shade700.withOpacity(0.85),
                       borderRadius: BorderRadius.circular(20),
